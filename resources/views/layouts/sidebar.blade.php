@@ -1,4 +1,4 @@
-<aside class="w-64 bg-gray-800 text-white flex flex-col h-screen">
+<aside class="w-64 bg-gray-800 text-white flex flex-col h-screen hidden lg:block">
     <div class="p-4 flex-shrink-0">
         <div class="flex items-center space-x-3 mb-8">
             <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -78,9 +78,12 @@
                 <p class="text-sm font-medium">Admin User</p>
                 <p class="text-xs text-gray-400">admin@sekolah.sch.id</p>
             </div>
+            <form action="{{ route('logout') }}" method="POST">
+            @csrf
             <button class="text-gray-400 hover:text-white">
                 <i class="fas fa-sign-out-alt"></i>
             </button>
+            </form>
         </div>
     </div>
 </aside>

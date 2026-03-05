@@ -40,7 +40,7 @@
             @include('layouts.header')
             
             <!-- Content -->
-            <main class="flex-1 p-6 overflow-y-auto">
+            <main class="flex md:flex-1 p-6 overflow-y-auto justify-center">
                 @yield('content')
             </main>
         </div>

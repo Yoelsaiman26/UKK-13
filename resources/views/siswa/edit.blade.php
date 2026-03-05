@@ -27,33 +27,31 @@
     @endif
     
     <!-- Header Section -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-6 text-white">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-4 sm:p-6 text-white">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold mb-2">Edit Siswa</h2>
-                    <p class="text-blue-100">Perbarui data siswa yang ada</p>
+                    <h2 class="text-xl sm:text-2xl font-bold mb-2">Edit Siswa</h2>
+                    <p class="text-blue-100 text-sm sm:text-base">Perbarui data siswa yang ada</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('siswa.index') }}" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200">
-                    <i class="fas fa-arrow-left mr-2"></i>Kembali
-                </a>
-            </div>
+            <a href="{{ route('siswa.index') }}" class="w-full sm:w-auto bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200">
+                <i class="fas fa-arrow-left mr-2"></i>Kembali
+            </a>
         </div>
     </div>
     
     <!-- Form Section -->
     <div class="bg-white rounded-lg shadow">
-        <div class="px-6 py-4 border-b border-gray-200">
+        <div class="px-4 sm:px-6 py-4 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-800">Informasi Siswa</h3>
             <p class="text-sm text-gray-600 mt-1">Perbarui data siswa yang ada</p>
         </div>
         
-        <form action="{{ route('siswa.update', $siswa->id) }}" method="post" class="p-6 space-y-6" enctype="multipart/form-data">
+        <form action="{{ route('siswa.update', $siswa->id) }}" method="post" class="p-4 sm:p-6 space-y-6" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <!-- Nama Lengkap -->
                 <div>
                     <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">
@@ -161,11 +159,11 @@
                           required>{{ $siswa->alamat }}</textarea>
             </div>
             
-            <div class="flex items-center justify-end space-x-3">
-                <a href="{{ route('siswa.index') }}" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+                <a href="{{ route('siswa.index') }}" class="w-full sm:w-auto px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                     <i class="fas fa-times mr-2"></i>Batal
                 </a>
-                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                <button type="submit" class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
                     <i class="fas fa-save mr-2"></i>Update Siswa
                 </button>
             </div>

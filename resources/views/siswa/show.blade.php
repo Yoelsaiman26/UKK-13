@@ -27,30 +27,28 @@
     @endif
     
     <!-- Header Section -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-6 text-white">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-4 sm:p-6 text-white">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold mb-2">Detail Siswa</h2>
-                    <p class="text-blue-100">Lihat informasi lengkap siswa</p>
+                    <h2 class="text-xl sm:text-2xl font-bold mb-2">Detail Siswa</h2>
+                    <p class="text-blue-100 text-sm sm:text-base">Lihat informasi lengkap siswa</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('siswa.index') }}" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200">
-                    <i class="fas fa-arrow-left mr-2"></i>Kembali
-                </a>
-            </div>
+            <a href="{{ route('siswa.index') }}" class="w-full sm:w-auto bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200">
+                <i class="fas fa-arrow-left mr-2"></i>Kembali
+            </a>
         </div>
     </div>
     
     <!-- Student Info Card -->
     <div class="bg-white rounded-lg shadow">
-        <div class="px-6 py-4 border-b border-gray-200">
+        <div class="px-4 sm:px-6 py-4 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-800">Informasi Siswa</h3>
         </div>
         
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-4 sm:p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                 <!-- Profile Photo -->
                 <div class="md:col-span-1">
                     <div class="text-center">
@@ -122,11 +120,11 @@
             
             <!-- Action Buttons -->
             <div class="mt-6 pt-6 border-t border-gray-200">
-                <div class="flex items-center justify-end space-x-3">
-                    <a href="{{ route('siswa.edit', $siswa->id) }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+                    <a href="{{ route('siswa.edit', $siswa->id) }}" class="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
                         <i class="fas fa-edit mr-2"></i>Edit Siswa
                     </a>
-                    <button type="button" onclick="confirmDelete({{ $siswa->id }}, '{{ $siswa->nama }}')" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200">
+                    <button type="button" onclick="confirmDelete({{ $siswa->id }}, '{{ $siswa->nama }}')" class="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200">
                         <i class="fas fa-trash mr-2"></i>Hapus Siswa
                     </button>
                 </div>

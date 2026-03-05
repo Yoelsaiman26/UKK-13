@@ -5,17 +5,22 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\JurusanController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PenggunaController;
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('/login');
+    return redirect()->route('login');
 });
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/login',[LoginController::class,'index'])->name('login');
+Route::post('/login',[LoginController::class,'login'])->name('login.post');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
 // Routes untuk pengaduan
 Route::prefix('pengaduan')->name('pengaduan.')->group(function () {
     Route::get('/', [DashboardController::class, 'pengaduanIndex'])->name('index');
-});
+})->middleware('auth');
 
 // Routes untuk sarana
 Route::prefix('sarana')->name('sarana.')->group(function () {
@@ -23,23 +28,23 @@ Route::prefix('sarana')->name('sarana.')->group(function () {
     Route::get('/laboratorium', [DashboardController::class, 'saranaLaboratorium'])->name('laboratorium');
     Route::get('/perpustakaan', [DashboardController::class, 'saranaPerpustakaan'])->name('perpustakaan');
     Route::get('/olahraga', [DashboardController::class, 'saranaOlahraga'])->name('olahraga');
-});
+})->middleware('auth');
 
 // Routes untuk laporan
 Route::prefix('laporan')->name('laporan.')->group(function () {
     Route::get('/', [DashboardController::class, 'laporanIndex'])->name('index');
-});
+})->middleware('auth');
 
 // Routes untuk pengguna
 Route::prefix('pengguna')->name('pengguna.')->group(function () {
     Route::get('/', [DashboardController::class, 'penggunaIndex'])->name('index');
-});
+})->middleware('auth');
 
 // Routes untuk pengaturan
 Route::prefix('pengaturan')->name('pengaturan.')->group(function () {
     Route::get('/profil', [DashboardController::class, 'pengaturanProfil'])->name('profil');
     Route::get('/sistem', [DashboardController::class, 'pengaturanSistem'])->name('sistem');
-});
+})->middleware('auth');
 
 Route::prefix('kategori')->name('kategori.')->group(function () {
     Route::get('/', [KategoriController::class, 'index'])->name('index');
@@ -49,7 +54,7 @@ Route::prefix('kategori')->name('kategori.')->group(function () {
     Route::get('/{kategori}/edit', [KategoriController::class, 'edit'])->name('edit');
     Route::put('/{kategori}', [KategoriController::class, 'update'])->name('update');
     Route::delete('/{kategori}', [KategoriController::class, 'destroy'])->name('destroy');
-});
+})->middleware('auth');
 
 Route::prefix('siswa')->name('siswa.')->group(function () {
     Route::get('/', [SiswaController::class, 'index'])->name('index');
@@ -59,10 +64,15 @@ Route::prefix('siswa')->name('siswa.')->group(function () {
     Route::get('/{siswa}/edit', [SiswaController::class, 'edit'])->name('edit');
     Route::put('/{siswa}', [SiswaController::class, 'update'])->name('update');
     Route::delete('/{siswa}', [SiswaController::class, 'destroy'])->name('destroy');
-});
+})->middleware('auth');
 
 Route::prefix('jurusan')->name('jurusan.')->group(function () {
     Route::get('/', [JurusanController::class, 'index'])->name('index');
     Route::post('/', [JurusanController::class, 'store'])->name('store');
     Route::delete('/{jurusan}', [JurusanController::class, 'destroy'])->name('destroy');
-});
+})->middleware('auth');
+
+Route::prefix('pengguna.')->name('pengguna.')->group(function () {
+    Route::get('/',[PenggunaController::class, 'index'])->name('index');
+    Route::get('/create', [PenggunaController::class, 'create'])->name('create');
+})->middleware('auth');
