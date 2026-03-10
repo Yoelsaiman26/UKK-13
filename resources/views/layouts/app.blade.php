@@ -6,6 +6,7 @@
     <title>@yield('title', 'Pengaduan Suara Sarana Sekolah')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://unpkg.com/sweetalert2@11"></script>
     <style>
         .sidebar-active {
@@ -27,21 +28,81 @@
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
         }
+        
+        /* Custom scrollbar for content */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Custom scrollbar for sidebar */
+        .sidebar-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .sidebar-scrollbar::-webkit-scrollbar-track {
+            background: #374151;
+        }
+        
+        .sidebar-scrollbar::-webkit-scrollbar-thumb {
+            background: #6b7280;
+            border-radius: 2px;
+        }
+        
+        .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+        
+        /* Custom scrollbar for submenu */
+        .sidebar-scrollbar-sub::-webkit-scrollbar {
+            width: 3px;
+        }
+        
+        .sidebar-scrollbar-sub::-webkit-scrollbar-track {
+            background: #4b5563;
+        }
+        
+        .sidebar-scrollbar-sub::-webkit-scrollbar-thumb {
+            background: #9ca3af;
+            border-radius: 2px;
+        }
+        
+        .sidebar-scrollbar-sub::-webkit-scrollbar-thumb:hover {
+            background: #d1d5db;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="flex h-screen">
+    <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        @include('layouts.sidebar')
+        <aside class="w-64 bg-gray-800 text-white flex flex-col h-screen hidden lg:block flex-shrink-0">
+            @include('layouts.sidebar')
+        </aside>
         
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- Header -->
-            @include('layouts.header')
+            <header class="bg-white shadow-sm border-b border-gray-200 flex-shrink-0">
+                @include('layouts.header')
+            </header>
             
-            <!-- Content -->
-            <main class="flex md:flex-1 p-6 overflow-y-auto justify-center">
-                @yield('content')
+            <!-- Content Area with Scroll -->
+            <main class="flex-1 p-6 overflow-y-auto custom-scrollbar">
+                <div class="max-w-7xl mx-auto">
+                    @yield('content')
+                </div>
             </main>
         </div>
     </div>
