@@ -8,7 +8,17 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        $aspirasi = \App\Models\Aspirasi::latest()->take(5)->get();
+        $kategori = \App\Models\Aspirasi::with('kategori')->get()
+            ->groupBy('kategori_id')
+            ->map(function($item) {
+                return [
+                    'name' => $item->first()->kategori->nama,
+                    'count' => $item->count()
+                ];
+            });
+            
+        return view('dashboard', compact('aspirasi', 'kategori'));
     }
 
     public function pengaduanIndex()

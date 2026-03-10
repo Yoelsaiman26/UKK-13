@@ -16,7 +16,7 @@
         <div class="bg-white rounded-lg shadow p-4 md:p-6">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
-                    <p class="text-sm text-gray-600 mb-1">Total Pengaduan</p>
+                    <p class="text-sm text-gray-600 mb-1">Total Aspirasi</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-800">156</p>
                     <p class="text-xs text-green-600 mt-2">
                         <i class="fas fa-arrow-up"></i> 12% dari bulan lalu
@@ -32,7 +32,7 @@
         <div class="bg-white rounded-lg shadow p-4 sm:p-6">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
-                    <p class="text-sm text-gray-600 mb-1">Menunggu Proses</p>
+                    <p class="text-sm text-gray-600 mb-1">Aspirasi Pending</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-800">23</p>
                     <p class="text-xs text-orange-600 mt-2">
                         <i class="fas fa-clock"></i> Perlu ditindak
@@ -48,7 +48,7 @@
         <div class="bg-white rounded-lg shadow p-4 sm:p-6">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
-                    <p class="text-sm text-gray-600 mb-1">Sedang Diproses</p>
+                    <p class="text-sm text-gray-600 mb-1">Asprasi Diproses</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-800">18</p>
                     <p class="text-xs text-blue-600 mt-2">
                         <i class="fas fa-spinner"></i> Dalam proses
@@ -64,7 +64,7 @@
         <div class="bg-white rounded-lg shadow p-4 sm:p-6">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
-                    <p class="text-sm text-gray-600 mb-1">Selesai</p>
+                    <p class="text-sm text-gray-600 mb-1">Aspirasi Selesai</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-800">115</p>
                     <p class="text-xs text-green-600 mt-2">
                         <i class="fas fa-check-circle"></i> 73.7% selesai
@@ -81,7 +81,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <!-- Pengaduan Chart -->
         <div class="bg-white rounded-lg shadow p-4 md:p-6">
-            <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Trend Pengaduan 6 Bulan Terakhir</h3>
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Grafik aspirasi per bulan</h3>
             <div class="h-48 md:h-64 flex items-center justify-center bg-gray-50 rounded">
                 <div class="text-center">
                     <i class="fas fa-chart-line text-3xl md:text-4xl text-gray-400 mb-2"></i>
@@ -94,34 +94,15 @@
         <div class="bg-white rounded-lg shadow p-4 md:p-6">
             <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Pengaduan per Kategori</h3>
             <div class="space-y-2 md:space-y-3">
+                @foreach($kategori as $item)
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-2 md:space-x-3">
                         <div class="w-2 h-2 md:w-3 md:h-3 bg-blue-500 rounded-full"></div>
-                        <span class="text-xs md:text-sm text-gray-700">Ruang Kelas</span>
+                        <span class="text-xs md:text-sm text-gray-700">{{ $item['name'] }}</span>
                     </div>
-                    <span class="text-xs md:text-sm font-medium">45</span>
+                    <span class="text-xs md:text-sm font-medium">{{ $item['count'] }}</span>
                 </div>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2 md:space-x-3">
-                        <div class="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full"></div>
-                        <span class="text-xs md:text-sm text-gray-700">Laboratorium</span>
-                    </div>
-                    <span class="text-xs md:text-sm font-medium">28</span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2 md:space-x-3">
-                        <div class="w-2 h-2 md:w-3 md:h-3 bg-yellow-500 rounded-full"></div>
-                        <span class="text-xs md:text-sm text-gray-700">Perpustakaan</span>
-                    </div>
-                    <span class="text-xs md:text-sm font-medium">32</span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2 md:space-x-3">
-                        <div class="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full"></div>
-                        <span class="text-xs md:text-sm text-gray-700">Sarana Olahraga</span>
-                    </div>
-                    <span class="text-xs md:text-sm font-medium">51</span>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -140,7 +121,7 @@
             <table class="w-full min-w-[500px]">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        {{-- <th class="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th> --}}
                         <th class="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pelapor</th>
                         <th class="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
                         <th class="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Judul</th>
@@ -149,35 +130,12 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach($aspirasi as $aspirasi)
                     <tr>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">#001</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">Ahmad Rizki</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">Ruang Kelas</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 text-sm text-gray-900 hidden sm:table-cell">Kursi rusak di kelas X-IPA 2</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                Menunggu
-                            </span>
-                        </td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-500">2 jam lalu</td>
-                    </tr>
-                    <tr>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">#002</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">Siti Nurhaliza</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">Laboratorium</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 text-sm text-gray-900 hidden sm:table-cell">Mikroskop tidak berfungsi</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                Proses
-                            </span>
-                        </td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-500">5 jam lalu</td>
-                    </tr>
-                    <tr>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">#003</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">Budi Santoso</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">Perpustakaan</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 text-sm text-gray-900 hidden sm:table-cell">AC ruang perpustakaan mati</td>
+                        {{-- <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">#001</td> --}}
+                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->siswa->nama }}</td>
+                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->kategori->nama }}</td>
+                        <td class="px-3 md:px-6 py-2 md:py-4 text-sm text-gray-900 hidden sm:table-cell">{{ $aspirasi->judul }}</td>
                         <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                 Selesai
@@ -185,6 +143,7 @@
                         </td>
                         <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-500">1 hari lalu</td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
