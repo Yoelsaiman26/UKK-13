@@ -8,6 +8,8 @@ use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\AspirasiController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LaporanController;
 
 Route::get('/', function () {
     // return view('/login');
@@ -18,6 +20,12 @@ Route::post('/login',[LoginController::class,'login'])->name('login.post');
 Route::post('/login/siswa',[LoginController::class,'loginSiswa'])->name('login.siswa.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['auth:siswas,web']);
+
+// Profile routes
+Route::prefix('profile')->name('profile.')->group(function () {
+    Route::get('/', [ProfileController::class, 'index'])->name('index');
+    Route::put('/', [ProfileController::class, 'update'])->name('update');
+})->middleware(['auth:siswas,web']);
 
 // Routes untuk pengaduan
 Route::prefix('pengaduan')->name('pengaduan.')->group(function () {
@@ -34,7 +42,7 @@ Route::prefix('sarana')->name('sarana.')->group(function () {
 
 // Routes untuk laporan
 Route::prefix('laporan')->name('laporan.')->group(function () {
-    Route::get('/', [DashboardController::class, 'laporanIndex'])->name('index');
+    Route::get('/', [LaporanController::class, 'index'])->name('index');
 })->middleware('auth:siswas,web');
 
 // Routes untuk pengguna

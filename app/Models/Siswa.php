@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Model;
 
 class Siswa extends Model
 {
@@ -13,6 +14,11 @@ class Siswa extends Model
     ];
 
     protected $table = 'siswas';
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
     public function jurusan()
     {

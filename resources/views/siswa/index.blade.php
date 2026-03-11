@@ -130,10 +130,10 @@
                             <td class="px-2 md:px-4 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">{{ $siswa->kelas }}</td>
                             <td class="px-2 md:px-4 py-2 md:py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex items-center space-x-1 md:space-x-2">
-                                    <a href="{{ route('siswa.show', $siswa->id) }}" class="text-blue-600 hover:text-blue-900 p-1" title="Detail">
+                                    <a href="{{ route('siswa.show', $siswa->id) }}" class="text-gray-600 hover:text-gray-900 p-1" title="Detail">
                                         <i class="fas fa-eye text-sm"></i>
                                     </a>
-                                    <a href="{{ route('siswa.edit', $siswa->id) }}" class="text-green-600 hover:text-green-900 p-1" title="Edit">
+                                    <a href="{{ route('siswa.edit', $siswa->id) }}" class="text-blue-600 hover:text-blue-800 p-1" title="Edit">
                                         <i class="fas fa-edit text-sm"></i>
                                     </a>
                                     <button type="button" onclick="confirmDelete({{ $siswa->id }}, '{{ $siswa->nama }}')" class="text-red-600 hover:text-red-900 p-1" title="Hapus">

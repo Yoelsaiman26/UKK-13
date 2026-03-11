@@ -17,7 +17,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-sm text-gray-600 mb-1">Total Aspirasi</p>
-                    <p class="text-xl sm:text-2xl font-bold text-gray-800">156</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ $totalAspirasi }}</p>
                     <p class="text-xs text-green-600 mt-2">
                         <i class="fas fa-arrow-up"></i> 12% dari bulan lalu
                     </p>
@@ -33,7 +33,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-sm text-gray-600 mb-1">Aspirasi Pending</p>
-                    <p class="text-xl sm:text-2xl font-bold text-gray-800">23</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ $pendingAspirasi }}</p>
                     <p class="text-xs text-orange-600 mt-2">
                         <i class="fas fa-clock"></i> Perlu ditindak
                     </p>
@@ -49,7 +49,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-sm text-gray-600 mb-1">Asprasi Diproses</p>
-                    <p class="text-xl sm:text-2xl font-bold text-gray-800">18</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ $prosesAspirasi }}</p>
                     <p class="text-xs text-blue-600 mt-2">
                         <i class="fas fa-spinner"></i> Dalam proses
                     </p>
@@ -65,7 +65,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-sm text-gray-600 mb-1">Aspirasi Selesai</p>
-                    <p class="text-xl sm:text-2xl font-bold text-gray-800">115</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ $selesaiAspirasi }}</p>
                     <p class="text-xs text-green-600 mt-2">
                         <i class="fas fa-check-circle"></i> 73.7% selesai
                     </p>
@@ -130,20 +130,42 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach($aspirasi as $aspirasi)
-                    <tr>
-                        {{-- <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">#001</td> --}}
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->siswa->nama }}</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->kategori->nama }}</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 text-sm text-gray-900 hidden sm:table-cell">{{ $aspirasi->judul }}</td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Selesai
-                            </span>
-                        </td>
-                        <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-500">1 hari lalu</td>
-                    </tr>
-                    @endforeach
+                    @if($aspirasi->count() > 0)
+                        @foreach($aspirasi as $aspirasi)
+                        <tr>
+                            {{-- <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">#001</td> --}}
+                            <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->siswa->nama }}</td>
+                            <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->kategori->nama }}</td>
+                            <td class="px-3 md:px-6 py-2 md:py-4 text-sm text-gray-900 hidden sm:table-cell">{{ $aspirasi->judul }}</td>
+                            <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap">
+                                @if($aspirasi->status == 'pending')
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">
+                                        Pending
+                                    </span>
+                                @elseif($aspirasi->status == 'diproses')
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        Diproses
+                                    </span>
+                                @else
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Selesai
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-3 md:px-6 py-2 md:py-4 whitespace-nowrap text-sm text-gray-500">{{ $aspirasi->created_at->diffForHumans() }}</td>
+                        </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                                <div class="flex flex-col items-center">
+                                    <i class="fas fa-inbox text-4xl text-gray-300 mb-3"></i>
+                                    <p class="text-lg font-medium text-gray-600">Belum ada aspirasi</p>
+                                    <p class="text-sm text-gray-500 mt-1">Mulai buat aspirasi pertama Anda</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>

@@ -57,7 +57,7 @@ class SiswaController extends Controller
             return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambahkan');
         } catch (\Exception $e) {
             // Log error untuk debugging
-            \Log::error('Error creating siswa: ' . $e->getMessage());
+            Log::error('Error creating siswa: ' . $e->getMessage());
             
             // Kembalikan dengan error message
             return redirect()->route('siswa.create')

@@ -44,7 +44,7 @@
                 </button>
 
                 <!-- User Profile -->
-                <div class="flex items-center space-x-3 text-xs md:text-sm">
+                <a href="{{ route('profile.index') }}" class="flex items-center space-x-3 text-xs md:text-sm hover:bg-gray-50 rounded-lg px-3 py-2 transition duration-150 cursor-pointer">
                     <div class="text-right">
 
                         <p class="font-medium text-gray-700">
@@ -68,7 +68,7 @@
                     <div class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center">
                         <i class="fas fa-user text-white"></i>
                     </div>
-                </div>
+                </a>
 
             </div>
 

@@ -22,7 +22,15 @@
             <span>Aspirasi</span>
         </a>
         
-        <!-- Kategori -->
+        <!-- Laporan -->
+        @if(auth()->guard('web')->check() && auth()->guard('web')->user()->name === 'admin')
+        <a href="{{ route('laporan.index') }}" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200 {{ request()->routeIs('laporan.*') ? 'sidebar-active' : 'hover:bg-gray-700' }}">
+            <i class="fas fa-file-alt w-5"></i>
+            <span>Laporan</span>
+        </a>
+        @endif
+
+                <!-- Kategori -->
         @if(auth()->guard('web')->check() && auth()->guard('web')->user()->name === 'admin')
         <a href="{{ route('kategori.index') }}" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200 {{ request()->routeIs('kategori.*') ? 'sidebar-active' : 'hover:bg-gray-700' }}">
             <i class="fas fa-tags w-5"></i>
@@ -65,12 +73,12 @@
             </div>
         @endif
         
-        <!-- Pengaturan -->
+        {{-- <!-- Pengaturan -->
         <div class="space-y-1">
             <button onclick="toggleSubmenu('pengaturan-submenu')" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-left">
                 <i class="fas fa-cog w-5"></i>
                 <span>Pengaturan</span>
-                <i id="pengaturan-chevron" class="fas fa-chevron-down ml-auto text-xs transition-transform duration-200"></i>
+                <i id="pengaturan-chevron" class="fas fa-chevron-down ml-auto text-xs transition-transform duration-0"></i>
             </button>
             <div id="pengaturan-submenu" class="ml-8 space-y-1 max-h-40 overflow-y-auto sidebar-scrollbar-sub hidden">
                 <a href="{{ route('pengaturan.profil') }}" class="sidebar-item block px-4 py-2 text-sm rounded hover:bg-gray-700 transition-colors duration-200 {{ request()->routeIs('pengaturan.profil') ? 'sidebar-active' : '' }}">
@@ -80,7 +88,7 @@
                     Pengaturan Sistem
                 </a>
             </div>
-        </div>
+        </div> --}}
         
         <!-- Spacer untuk memastikan ada ruang di bawah -->
         <div class="h-8"></div>
