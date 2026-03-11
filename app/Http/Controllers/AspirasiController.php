@@ -115,4 +115,81 @@ class AspirasiController extends Controller
 
         return redirect()->route('aspirasi.index')->with('success','Umpan balik berhasil ditambahkan');
     }
+
+    public function filter(Request $request)
+    {
+        $query = Aspirasi::with(['kategori','siswa']);
+        
+        // Filter by search term
+        if ($request->filled('search')) {
+            $searchTerm = $request->get('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('judul', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('keterangan', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('lokasi', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+        
+        // Filter by category
+        if ($request->filled('kategori_id')) {
+            $query->where('kategori_id', $request->get('kategori_id'));
+        }
+        
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->get('status'));
+        }
+        
+        $aspirasis = $query->latest()->get();
+        
+        // Filter untuk siswa yang sedang login
+        if(auth()->guard('siswas')->check()) {
+            $aspirasis = $aspirasis->where('siswa_id', auth()->guard('siswas')->user()->id);
+        }
+
+        $kategoris = Kategori::all();
+        $siswas = Siswa::all();
+        $siswaLogin = null;
+        
+        if(auth()->guard('siswas')->check()) {
+            $siswaLogin = auth()->guard('siswas')->user();
+        }
+
+        return view('aspirasi.index', compact('aspirasis','kategoris','siswas','siswaLogin'))
+            ->with('filter', true);
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q');
+        
+        if (empty($query)) {
+            return redirect()->route('aspirasi.index');
+        }
+
+        $aspirasis = Aspirasi::with(['kategori','siswa'])
+            ->where(function($q) use ($query) {
+                $q->where('judul', 'LIKE', "%{$query}%")
+                  ->orWhere('keterangan', 'LIKE', "%{$query}%")
+                  ->orWhere('lokasi', 'LIKE', "%{$query}%");
+            })
+            ->latest()
+            ->get();
+
+        // Filter untuk siswa yang sedang login
+        if(auth()->guard('siswas')->check()) {
+            $aspirasis = $aspirasis->where('siswa_id', auth()->guard('siswas')->user()->id);
+        }
+
+        $kategoris = Kategori::all();
+        $siswas = Siswa::all();
+        $siswaLogin = null;
+        
+        if(auth()->guard('siswas')->check()) {
+            $siswaLogin = auth()->guard('siswas')->user();
+        }
+
+        return view('aspirasi.index', compact('aspirasis','kategoris','siswas','siswaLogin'))
+            ->with('search', $query);
+    }
 }

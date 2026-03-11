@@ -20,6 +20,7 @@ Route::post('/login',[LoginController::class,'login'])->name('login.post');
 Route::post('/login/siswa',[LoginController::class,'loginSiswa'])->name('login.siswa.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['auth:siswas,web']);
+Route::get('/dashboard/weekly-data', [DashboardController::class, 'getWeeklyData'])->name('dashboard.weekly-data')->middleware(['auth:siswas,web']);
 
 // Profile routes
 Route::prefix('profile')->name('profile.')->group(function () {
@@ -43,6 +44,9 @@ Route::prefix('sarana')->name('sarana.')->group(function () {
 // Routes untuk laporan
 Route::prefix('laporan')->name('laporan.')->group(function () {
     Route::get('/', [LaporanController::class, 'index'])->name('index');
+    Route::get('/export-pdf', [LaporanController::class, 'exportPdf'])->name('export.pdf');
+    Route::get('/export-excel', [LaporanController::class, 'exportExcel'])->name('export.excel');
+    Route::post('/import-excel', [LaporanController::class, 'importExcel'])->name('import.excel');
 })->middleware('auth:siswas,web');
 
 // Routes untuk pengguna
@@ -89,6 +93,8 @@ Route::prefix('pengguna')->name('pengguna.')->group(function () {
 
 Route::prefix('aspirasi')->name('aspirasi.')->group(function (){
     Route::get('/', [AspirasiController::class, 'index'])->name('index');
+    Route::get('/search', [AspirasiController::class, 'search'])->name('search');
+    Route::post('/filter', [AspirasiController::class, 'filter'])->name('filter');
     Route::get('/create', [AspirasiController::class, 'create'])->name('create');
     Route::post('/', [AspirasiController::class, 'store'])->name('store');
     Route::get('/{aspirasi}', [AspirasiController::class, 'show'])->name('show');

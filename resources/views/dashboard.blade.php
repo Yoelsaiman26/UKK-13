@@ -81,12 +81,9 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <!-- Pengaduan Chart -->
         <div class="bg-white rounded-lg shadow p-4 md:p-6">
-            <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Grafik aspirasi per bulan</h3>
-            <div class="h-48 md:h-64 flex items-center justify-center bg-gray-50 rounded">
-                <div class="text-center">
-                    <i class="fas fa-chart-line text-3xl md:text-4xl text-gray-400 mb-2"></i>
-                    <p class="text-sm md:text-base text-gray-500">Chart akan ditampilkan di sini</p>
-                </div>
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">Grafik Aspirasi Mingguan - {{ now()->format('F Y') }}</h3>
+            <div class="h-48 md:h-64 relative">
+                <canvas id="weeklyChart"></canvas>
             </div>
         </div>
         
@@ -172,3 +169,104 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize weekly chart
+    const ctx = document.getElementById('weeklyChart').getContext('2d');
+    const weeklyChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: @json($weeklyData['labels']),
+            datasets: [{
+                label: 'Jumlah Aspirasi',
+                data: @json($weeklyData['data']),
+                borderColor: 'rgb(59, 130, 246)',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: 'rgb(59, 130, 246)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: 'rgb(59, 130, 246)',
+                    borderWidth: 1,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) {
+                            return 'Aspirasi: ' + context.parsed.y + ' buah';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        color: '#6b7280',
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#6b7280',
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+
+    // Real-time update functionality
+    function updateChartData() {
+        fetch('{{ route("dashboard") }}/weekly-data')
+            .then(response => response.json())
+            .then(data => {
+                weeklyChart.data.datasets[0].data = data.data;
+                weeklyChart.update('none'); // Update without animation for smooth real-time feel
+            })
+            .catch(error => {
+                console.error('Error updating chart:', error);
+            });
+    }
+
+    // Update chart every 30 seconds for real-time effect
+    setInterval(updateChartData, 30000);
+    
+    // Also update when page becomes visible again (tab switch)
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            updateChartData();
+        }
+    });
+});
+</script>
+@endpush

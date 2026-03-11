@@ -26,22 +26,15 @@
             <div class="flex items-center space-x-4">
 
                 <!-- Search -->
-                <div class="relative hidden md:block">
+                <form action="{{ route('aspirasi.search') }}" method="GET" class="relative hidden md:block">
                     <input type="text" 
+                        name="q"
                         placeholder="Cari pengaduan..." 
-                        class="w-48 md:w-64 px-4 py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-64 md:w-90 px-6 py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        onkeypress="if(event.key === 'Enter') this.form.submit()">
 
                     <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
-                </div>
-
-                <!-- Notification -->
-                <button class="relative text-gray-500 hover:text-gray-700 focus:outline-none">
-                    <i class="fas fa-bell text-xl"></i>
-
-                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        3
-                    </span>
-                </button>
+                </form>
 
                 <!-- User Profile -->
                 <a href="{{ route('profile.index') }}" class="flex items-center space-x-3 text-xs md:text-sm hover:bg-gray-50 rounded-lg px-3 py-2 transition duration-150 cursor-pointer">
@@ -168,7 +161,7 @@
 
 
             <!-- Pengaturan -->
-            <div>
+            {{-- <div>
                 <p class="px-4 pt-4 text-xs text-gray-400 uppercase">Pengaturan</p>
 
                 <a href="{{ route('pengaturan.profil') }}" 
@@ -176,11 +169,11 @@
                     Profil Sekolah
                 </a>
 
-                <a href="{{ route('pengaturan.sistem') }}" 
+                <a href="{{ route('pengaturan.sistem') }}"
                 class="block px-6 py-2 text-sm hover:bg-gray-700 rounded">
                     Pengaturan Sistem
                 </a>
-            </div>
+            </div> --}}
 
         </nav>
 

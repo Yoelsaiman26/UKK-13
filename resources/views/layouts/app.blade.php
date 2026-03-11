@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://unpkg.com/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .sidebar-active {
             background-color: #3b82f6 !important;
@@ -98,6 +99,25 @@
                 @include('layouts.header')
             </header>
             
+            <!-- Flash Messages -->
+            @if(session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mx-6 mt-4" role="alert">
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                    <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.remove()">
+                        <span class="text-green-500">&times;</span>
+                    </button>
+                </div>
+            @endif
+            
+            @if(session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-6 mt-4" role="alert">
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                    <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.remove()">
+                        <span class="text-red-500">&times;</span>
+                    </button>
+                </div>
+            @endif
+            
             <!-- Content Area with Scroll -->
             <main class="flex-1 p-6 overflow-y-auto custom-scrollbar">
                 <div class="max-w-7xl mx-auto">
@@ -147,5 +167,6 @@
             }
         }
     </script>
+    @stack('scripts')
 </body>
 </html>

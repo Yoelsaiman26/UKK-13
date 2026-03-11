@@ -12,12 +12,20 @@
                 <p class="text-blue-100 text-sm md:text-base">Lihat dan kelola semua data aspirasi siswa</p>
             </div>
             <div class="flex flex-col sm:flex-row gap-2">
-                <button type="button" class="w-full sm:w-auto bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200">
-                    <i class="fas fa-file-excel mr-2"></i>Import Excel
-                </button>
-                <button type="button" class="w-full sm:w-auto bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200">
+                <!-- Import Excel Form -->
+                <form action="{{ route('laporan.import.excel') }}" method="POST" enctype="multipart/form-data" class="flex items-center">
+                    @csrf
+                    <input type="file" name="file" id="import-file" class="hidden" accept=".xlsx,.xls,.csv">
+                    <button type="button" onclick="document.getElementById('import-file').click()" class="w-full sm:w-auto bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200">
+                        <i class="fas fa-file-excel mr-2"></i>Import Excel
+                    </button>
+                </form>
+                <a href="{{ route('laporan.export.pdf') }}" class="w-full sm:w-auto bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200 text-center inline-block">
                     <i class="fas fa-file-pdf mr-2"></i>Export PDF
-                </button>
+                </a>
+                <a href="{{ route('laporan.export.excel') }}" class="w-full sm:w-auto bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors duration-200 text-center inline-block">
+                    <i class="fas fa-file-excel mr-2"></i>Export Excel
+                </a>
             </div>
         </div>
     </div>
@@ -129,7 +137,7 @@
                         <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->siswa->nama ?? '-' }}</td>
                         <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->siswa->nisn ?? '-' }}</td>
                         <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->kategori->nama ?? '-' }}</td>
-                        <td class="px-4 md:px-6 py-4 text-sm text-gray-900">{{ Str::limit($aspirasi->aspirasi, 50) }}</td>
+                        <td class="px-4 md:px-6 py-4 text-sm text-gray-900">{{ Str::limit($aspirasi->judul, 50) }}</td>
                         <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $aspirasi->created_at->format('d/m/Y') }}</td>
                         <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm">
                             @if($aspirasi->status == 'pending')
@@ -178,4 +186,12 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('import-file').addEventListener('change', function(e) {
+    if (e.target.files.length > 0) {
+        e.target.form.submit();
+    }
+});
+</script>
 @endsection

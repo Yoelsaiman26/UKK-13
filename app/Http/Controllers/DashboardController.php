@@ -8,6 +8,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        // Get weekly data for current month
+        $weeklyData = $this->getWeeklyDataForCurrentMonth();
+        
         // Check if user is logged in as admin (web guard)
         if (auth()->guard('web')->check()) {
             // Admin Dashboard - Show all aspirasi from all siswa
@@ -32,7 +35,7 @@ class DashboardController extends Controller
             $prosesAspirasi = \App\Models\Aspirasi::where('status', 'diproses')->count();
             $selesaiAspirasi = \App\Models\Aspirasi::where('status', 'selesai')->count();
                 
-            return view('dashboard', compact('aspirasi', 'kategori', 'totalAspirasi', 'pendingAspirasi', 'prosesAspirasi', 'selesaiAspirasi'));
+            return view('dashboard', compact('aspirasi', 'kategori', 'totalAspirasi', 'pendingAspirasi', 'prosesAspirasi', 'selesaiAspirasi', 'weeklyData'));
         }
         
         // Check if user is logged in as siswa (siswas guard)
@@ -64,11 +67,59 @@ class DashboardController extends Controller
             $prosesAspirasi = \App\Models\Aspirasi::where('siswa_id', $siswaId)->where('status', 'diproses')->count();
             $selesaiAspirasi = \App\Models\Aspirasi::where('siswa_id', $siswaId)->where('status', 'selesai')->count();
                 
-            return view('dashboard', compact('aspirasi', 'kategori', 'totalAspirasi', 'pendingAspirasi', 'prosesAspirasi', 'selesaiAspirasi'));
+            return view('dashboard', compact('aspirasi', 'kategori', 'totalAspirasi', 'pendingAspirasi', 'prosesAspirasi', 'selesaiAspirasi', 'weeklyData'));
         }
         
         // If not logged in, redirect to login
         return redirect()->route('login');
+    }
+
+    public function getWeeklyData()
+    {
+        $weeklyData = $this->getWeeklyDataForCurrentMonth();
+        return response()->json($weeklyData);
+    }
+
+    private function getWeeklyDataForCurrentMonth()
+    {
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+        
+        // Get all aspirasi for current month
+        $query = \App\Models\Aspirasi::whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear);
+            
+        // If user is siswa, only get their data
+        if (auth()->guard('siswas')->check()) {
+            $siswaId = auth()->guard('siswas')->user()->id;
+            $query->where('siswa_id', $siswaId);
+        }
+        
+        $aspirasis = $query->get();
+        
+        // Initialize weeks data
+        $weeks = [
+            'Minggu 1' => 0,
+            'Minggu 2' => 0,
+            'Minggu 3' => 0,
+            'Minggu 4' => 0,
+            'Minggu 5' => 0,
+        ];
+        
+        // Group aspirasi by week
+        foreach ($aspirasis as $aspirasi) {
+            $weekNumber = $aspirasi->created_at->weekOfMonth ?? ceil($aspirasi->created_at->day / 7);
+            $weekKey = "Minggu " . $weekNumber;
+            
+            if (isset($weeks[$weekKey])) {
+                $weeks[$weekKey]++;
+            }
+        }
+        
+        return [
+            'labels' => array_keys($weeks),
+            'data' => array_values($weeks)
+        ];
     }
 
     public function pengaduanIndex()

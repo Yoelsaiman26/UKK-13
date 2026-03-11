@@ -9,7 +9,13 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="text-xl md:text-2xl font-bold mb-2">Manajemen Aspirasi</h2>
-                <p class="text-blue-100 text-sm md:text-base">Kelola semua aspirasi dan usulan dari siswa</p>
+                <p class="text-blue-100 text-sm md:text-base">
+                    @if(session('search'))
+                        Hasil pencarian untuk: <strong>"{{ session('search') }}"</strong>
+                    @else
+                        Kelola semua aspirasi dan usulan dari siswa
+                    @endif
+                </p>
             </div>
             
             @if(auth()->guard('siswas')->check())
@@ -20,45 +26,97 @@
         </div>
     </div>
 
-    <!-- Filter Section -->
-    <div class="bg-white rounded-lg shadow p-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                <input type="text" id="searchInput" placeholder="Cari aspirasi..."  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+    @if(session('search'))
+    <!-- Search Info Bar -->
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-search text-blue-600 mr-3"></i>
+                <div>
+                    <p class="text-sm font-medium text-blue-900">
+                        Menampilkan hasil pencarian untuk: <strong>"{{ session('search') }}"</strong>
+                    </p>
+                    <p class="text-xs text-blue-700 mt-1">
+                        Ditemukan {{ $aspirasis->count() }} hasil
+                    </p>
+                </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                <select id="kategoriFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Semua Kategori</option>
-                    @foreach($kategoris as $kategori)
-                        <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Semua Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="proses">Diproses</option>
-                    <option value="selesai">Selesai</option>
-                    <option value="ditolak">Ditolak</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">&nbsp;</label>
-                <button onclick="filterData()" class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    <i class="fas fa-filter mr-2"></i>Filter
-                </button>
-            </div>
+            <a href="{{ route('aspirasi.index') }}" class="text-sm text-blue-600 hover:text-blue-800 underline">
+                <i class="fas fa-times mr-1"></i>Tutup pencarian
+            </a>
         </div>
     </div>
+    @endif
+
+    <!-- Filter Section -->
+    <div class="bg-white rounded-lg shadow p-4">
+        <form action="{{ route('aspirasi.filter') }}" method="POST" id="filterForm">
+            @csrf
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari aspirasi..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                    <select name="kategori_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Semua Kategori</option>
+                        @foreach($kategoris as $kategori)
+                            <option value="{{ $kategori->id }}" {{ request('kategori_id') == $kategori->id ? 'selected' : '' }}>{{ $kategori->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="diproses" {{ request('status') == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                        <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                        <option value="ditolak" {{ request('status') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                    </select>
+                </div>
+                <div class="flex items-end gap-2">
+                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                        <i class="fas fa-filter mr-2"></i>Filter
+                    </button>
+                    <a href="{{ route('aspirasi.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200">
+                        <i class="fas fa-times mr-2"></i>Reset
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @if(session('filter'))
+    <!-- Filter Info Bar -->
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-filter text-green-600 mr-3"></i>
+                <div>
+                    <p class="text-sm font-medium text-green-900">
+                        Data telah difilter sesuai kriteria yang dipilih
+                    </p>
+                    <p class="text-xs text-green-700 mt-1">
+                        Ditemukan {{ $aspirasis->count() }} hasil
+                    </p>
+                </div>
+            </div>
+            <a href="{{ route('aspirasi.index') }}" class="text-sm text-green-600 hover:text-green-800 underline">
+                <i class="fas fa-times mr-1"></i>Hapus filter
+            </a>
+        </div>
+    </div>
+    @endif
 
     <!-- Table Section -->
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
             <h3 class="text-base md:text-lg font-semibold text-gray-800">Daftar Aspirasi</h3>
+            <span class="text-sm text-gray-500">
+                Menampilkan <span id="showingFrom">0</span> - <span id="showingTo">0</span> dari <span id="totalData">0</span> data
+            </span>
             <span class="text-sm text-gray-500">Menampilkan <span id="totalCount">0</span> data</span>
         </div>
         
@@ -527,6 +585,16 @@
 </div>
 
 <script>
+// Initialize search input with current search value
+document.addEventListener('DOMContentLoaded', function() {
+    @if(session('search'))
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = "{{ session('search') }}";
+        }
+    @endif
+});
+
 // Debug function
 function debugModal() {
     console.log('Modal element:', document.getElementById('aspirasiModal'));
